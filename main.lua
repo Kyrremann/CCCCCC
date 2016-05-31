@@ -10,21 +10,24 @@ function love.load()
    simplePlayer.y = 100
 
    world:add(simplePlayer, simplePlayer.x, simplePlayer.y, 45, 54)
-   local A = {name='hello'}
+   local A = {name='hello A'}
+   local B = {name='hello B'}
    world:add(A, 500, 0, 500, 200)
+   world:add(B, 0, 0, 20, 200)
 end
 
 function love.update(dt)
    if love.keyboard.isDown('right') then
       simplePlayer.x, simplePlayer.y = world:move(simplePlayer, simplePlayer.x + (dt * 200), simplePlayer.y)
    elseif love.keyboard.isDown('left') then
-      simplePlayer.x = simplePlayer.x - (dt * 200)
+      simplePlayer.x, simplePlayer.y = world:move(simplePlayer, simplePlayer.x - (dt * 200), simplePlayer.y)
    end
    as:updateInstance(simplePlayer, dt)
 end
 
 function love.draw()
    love.graphics.rectangle('line', 500, 0, 500, 200)
+   love.graphics.rectangle('line', 0, 0, 20, 200)
    as:drawInstance(simplePlayer)
 end
 

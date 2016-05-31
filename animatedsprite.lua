@@ -21,7 +21,7 @@ function animatedSprite:loadSprite(sprite_def)
    --Load the sprite definition file to ensure it exists
    local definition_file = loadfile(sprite_def)
 
-   --If the file doesn`t exist or has syntax errors, it`ll be nil.
+   --If the file doesn't exist or has syntax errors, it'll be nil.
    if definition_file == nil then
       --Spit out a warning and return nil.
       print("Attempt to load an invalid file (inexistent or syntax errors?): "..sprite_def)
@@ -35,7 +35,7 @@ function animatedSprite:loadSprite(sprite_def)
       If we used dofile with an invalid file path our program
       would crash. 
       At this point, executing the file will load all the necessary
-      information in a single call. There`s no need to parse
+      information in a single call. There's no need to parse
       this of serialization.
    ]]
    local old_sprite = sprite_bank[sprite_def]
@@ -96,8 +96,8 @@ function animatedSprite:getInstance(sprite_def)
       y = 0,
       rotation = 0,
       dir = 1,
-      offset_x = 22.5,
-      offset_y = 27,
+      offset_x = 0,--22.5,
+      offset_y = 0,--27,
       flipped = false
    }
 end
@@ -125,8 +125,15 @@ end
 function animatedSprite:drawInstance(spr)
    love.graphics.push()
    love.graphics.translate(spr.x, spr.y)
-   love.graphics.rotate(spr.rotation)
-   love.graphics.rectangle('line', -22.5, -27, 45, 54)
+   -- love.graphics.rotate(spr.rotation)
+   --love.graphics.rectangle('line', -22.5, -27, 45, 54)
+   if spr.dir == -1 then
+      spr.offset_x = 45
+   else
+      spr.offset_x = 0
+   end
+ 
+   love.graphics.rectangle('line', 0, 0, 45, 54)
    love.graphics.draw(
       image_bank[spr.sprite.sprite_sheet], --The image
       spr.sprite.animations[spr.curr_anim][spr.curr_frame], --Current frame of the current animation
