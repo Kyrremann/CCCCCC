@@ -126,15 +126,15 @@ function animatedSprite:drawInstance(spr)
    love.graphics.push()
    love.graphics.translate(spr.x, spr.y)
    -- love.graphics.rotate(spr.rotation)
-   --love.graphics.rectangle('line', -22.5, -27, 45, 54)
+   -- love.graphics.rectangle('line', -22.5, -27, 45, 54)
    if spr.dir == -1 then
       spr.offset_x = 45
    else
       spr.offset_x = 0
    end
  
-   love.graphics.rectangle('line', 0, 0, 45, 54)
-   love.graphics.draw(
+   love.graphics.rectangle('line', 0, 0, 4, 6)
+   --[[love.graphics.draw(
       image_bank[spr.sprite.sprite_sheet], --The image
       spr.sprite.animations[spr.curr_anim][spr.curr_frame], --Current frame of the current animation
       0,
@@ -144,7 +144,7 @@ function animatedSprite:drawInstance(spr)
       1,
       spr.offset_x,
       spr.offset_y
-   )
+      )]]
    love.graphics.pop()
 end
 
