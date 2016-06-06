@@ -1,22 +1,19 @@
 next_animation = 2
 function love.load()
    local bump = require 'bump'
-   world = bump.newWorld(45)
+   world = bump.newWorld(16)
 
    as = require 'animatedsprite'
+   me = require 'mapengine'
+
+   me:loadLevel('level_1.lua', world)
    
    simplePlayer = as:getInstance('simpleplayersprite.lua')
-   simplePlayer.x = 100
+   simplePlayer.x = 600
    simplePlayer.y = 100
    gravity = 600
 
-   world:add(simplePlayer, simplePlayer.x, simplePlayer.y, 4, 6)
-   local top = {name='top'}
-   local bottom = {name='bottom'}
-   local middle = {name='middle'}
-   world:add(top, 0, 0, love.graphics.getWidth(), 2)
-   world:add(bottom, 0, love.graphics.getHeight() - 2, love.graphics.getWidth(), 2)
-   world:add(middle, love.graphics.getWidth() / 4, love.graphics.getHeight() / 4, 500, 5)
+   world:add(simplePlayer, simplePlayer.x, simplePlayer.y, 16, 16)
 end
 
 function love.update(dt)
@@ -37,15 +34,13 @@ function love.update(dt)
 end
 
 function love.draw()
-   love.graphics.rectangle('line', 0, 0, love.graphics.getWidth(), 2)
-   love.graphics.rectangle('line', 0, love.graphics.getHeight() - 2, love.graphics.getWidth(), 2)
-   love.graphics.rectangle('line', love.graphics.getWidth() / 4, love.graphics.getHeight() / 4, 500, 5)
+   me:draw()
    as:drawInstance(simplePlayer)
 end
 
 function love.keypressed(key, scancode, isrepeat)
    if key == 'left' or key == 'right' then
-      simplePlayer.curr_anim = simplePlayer.sprite.animations_names[2]
+      simplePlayer.curr_anim = simplePlayer.sprite.animations_names[1]
       simplePlayer.curr_frame = 1
       if key == 'left' then
 	 if simplePlayer.flipped then

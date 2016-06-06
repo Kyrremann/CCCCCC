@@ -18,7 +18,7 @@ local image_bank = {} --Contains all images that were already loaded
 function animatedSprite:loadSprite(sprite_def)
    if sprite_def == nil then return nil end
    
-   --Load the sprite definition file to ensure it exists
+   --Load the sprite inition file to ensure it exists
    local definition_file = loadfile(sprite_def)
 
    --If the file doesn't exist or has syntax errors, it'll be nil.
@@ -59,8 +59,8 @@ function animatedSprite:loadSprite(sprite_def)
    local sprite_sheet = sprite_bank[sprite_def].sprite_sheet
 
    --Load the image.
-   local old_image = image_bank [sprite_sheet]
-   image_bank [sprite_sheet] = love.graphics.newImage(sprite_sheet)
+   local old_image = image_bank[sprite_sheet]
+   image_bank[sprite_sheet] = love.graphics.newImage(sprite_sheet)
    
    --Check if the loaded image is valid.
    if image_bank[sprite_sheet] == nil then
@@ -68,11 +68,10 @@ function animatedSprite:loadSprite(sprite_def)
       image_bank [sprite_sheet] = old_image	-- Revert image
       sprite_bank[sprite_def] = old_sprite	-- Revert sprite
       
-      print("Failed loading sprite "..sprite_def..", invalid image path ( "
-	       ..sprite_sheet.." ).")
+      print("Failed loading sprite "..sprite_def..", invalid image path ( "..sprite_sheet.." ).")
    end
    
-   return sprite_bank [sprite_def]
+   return sprite_bank[sprite_def]
 end
 
 function animatedSprite:getInstance(sprite_def)
@@ -133,18 +132,13 @@ function animatedSprite:drawInstance(spr)
       spr.offset_x = 0
    end
  
-   love.graphics.rectangle('line', 0, 0, 4, 6)
-   --[[love.graphics.draw(
+   -- love.graphics.rectangle('line', 0, 0, 16, 16)
+   love.graphics.draw(
       image_bank[spr.sprite.sprite_sheet], --The image
       spr.sprite.animations[spr.curr_anim][spr.curr_frame], --Current frame of the current animation
       0,
-      0,
-      0,
-      spr.dir,
-      1,
-      spr.offset_x,
-      spr.offset_y
-      )]]
+      0
+   )
    love.graphics.pop()
 end
 
