@@ -2,9 +2,10 @@ local mapengine = {}
 local mapBank = {}
 local spritBank = {}
 local spritesheet = ''
+local protoMap
 
 function mapengine:loadLevel(level, world)
-   local protoMap = loadfile(level)()
+   protoMap = loadfile(level)()
    spritesheet = love.graphics.newImage('images/roguelikeDungeon_transparent.png')
 
    for y=1, protoMap.height do
@@ -38,6 +39,14 @@ function mapengine:loadLevel(level, world)
 	 end
       end
    end
+
+   local goal = protoMap.goal
+   mapBank[goal.y][goal.x] = {
+      quad = love.graphics.newQuad(
+	 goal.tile_x, goal.tile_y,
+	 16, 16, 492, 305)
+   }
+   -- world:add(mapBank[goal.y][goal.x], (goal.x - 1) * 16, (goal.y - 1) * 16, 16, 16)
 end
 
 function mapengine:draw()
@@ -53,6 +62,11 @@ function mapengine:draw()
 	 end
       end
    end
+end
+
+function mapengine:setStartZone(player)
+   player.x = protoMap.start.x * 16
+   player.y = protoMap.start.y * 16
 end
 
 return mapengine

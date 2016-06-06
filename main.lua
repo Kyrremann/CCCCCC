@@ -9,8 +9,7 @@ function love.load()
    me:loadLevel('level_1.lua', world)
    
    simplePlayer = as:getInstance('simpleplayersprite.lua')
-   simplePlayer.x = 600
-   simplePlayer.y = 100
+   me:setStartZone(simplePlayer)
    gravity = 600
 
    world:add(simplePlayer, simplePlayer.x, simplePlayer.y, 16, 16)
