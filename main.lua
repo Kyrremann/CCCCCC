@@ -18,12 +18,20 @@ end
 function love.update(dt)
    local cols = nil
    local len = nil
+
    simplePlayer.x, simplePlayer.y, cols, len = world:move(simplePlayer, simplePlayer.x, simplePlayer.y + (gravity * dt))
+   if #cols > 0 then
+      -- check if user is at goal
+      if cols[1].other.title == 'goal' then
+	 love.event.quit()	 
+      end
+   end
    if len == 1 then
       simplePlayer.grounded = true
    else
       simplePlayer.grounded = false
    end
+
    if love.keyboard.isDown('right') then
       simplePlayer.x, simplePlayer.y = world:move(simplePlayer, simplePlayer.x + (dt * 400), simplePlayer.y)
    elseif love.keyboard.isDown('left') then

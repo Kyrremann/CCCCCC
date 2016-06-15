@@ -19,6 +19,7 @@ function mapengine:loadLevel(level, world)
       if tile.x_range then
 	 for x=tile.x_range[1], tile.x_range[2] do
 	    local temp = {
+	       title = 'simple ground',
 	       quad = love.graphics.newQuad(
 		  tile.tile_x, tile.tile_y,
 		  16, 16, 492, 305)
@@ -41,12 +42,14 @@ function mapengine:loadLevel(level, world)
    end
 
    local goal = protoMap.goal
-   mapBank[goal.y][goal.x] = {
+   local temp = {
+      title = 'goal',
       quad = love.graphics.newQuad(
 	 goal.tile_x, goal.tile_y,
 	 16, 16, 492, 305)
    }
-   -- world:add(mapBank[goal.y][goal.x], (goal.x - 1) * 16, (goal.y - 1) * 16, 16, 16)
+   mapBank[goal.y][goal.x] = temp
+   world:add(temp, (goal.x - 1) * 16, (goal.y - 1) * 16, 16, 16)
 end
 
 function mapengine:draw()
