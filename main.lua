@@ -1,82 +1,84 @@
-next_animation = 2
 function love.load()
-   local bump = require 'bump'
-   world = bump.newWorld(16)
-
-   as = require 'animatedsprite'
-   me = require 'mapengine'
-
-   me:loadLevel('level_1.lua', world)
+   ge = require 'gameengine'
+   gs = require 'gamestate'
    
-   simplePlayer = as:getInstance('simpleplayersprite.lua')
-   me:setStartZone(simplePlayer)
-   gravity = 600
-
-   world:add(simplePlayer, simplePlayer.x, simplePlayer.y, 16, 16)
+   gs:setMenu()
+   leaderboard_time = 0
+   leaderboard_text = ""
 end
 
 function love.update(dt)
-   local cols = nil
-   local len = nil
-
-   simplePlayer.x, simplePlayer.y, cols, len = world:move(simplePlayer, simplePlayer.x, simplePlayer.y + (gravity * dt))
-   if #cols > 0 then
-      -- check if user is at goal
-      if cols[1].other.title == 'goal' then
-	 love.event.quit()	 
-      end
-   end
-   if len == 1 then
-      simplePlayer.grounded = true
+   if gs:isGame() then
+      ge:update(dt)
+   elseif gs:isEnd() then
+      -- ask user to type name
+      -- show time
    else
-      simplePlayer.grounded = false
+      -- menu
+      -- show name of game
+      -- show leaderboard
+      -- show start
    end
-
-   if love.keyboard.isDown('right') then
-      simplePlayer.x, simplePlayer.y = world:move(simplePlayer, simplePlayer.x + (dt * 400), simplePlayer.y)
-   elseif love.keyboard.isDown('left') then
-      simplePlayer.x, simplePlayer.y = world:move(simplePlayer, simplePlayer.x - (dt * 400), simplePlayer.y)
-   end
-   as:updateInstance(simplePlayer, dt)
 end
 
 function love.draw()
-   me:draw()
-   as:drawInstance(simplePlayer)
+   if gs:isGame() then
+      ge:draw()
+   elseif gs:isEnd() then
+      love.graphics.printf(
+	 string.format("You time was %.3f! Type you name, please! -- %q",
+	    leaderboard_time, leaderboard_text),
+	 0, 0, love.graphics.getWidth())
+   else
+      --
+   end
 end
 
 function love.keypressed(key, scancode, isrepeat)
-   if key == 'left' or key == 'right' then
-      simplePlayer.curr_anim = simplePlayer.sprite.animations_names[1]
-      simplePlayer.curr_frame = 1
-      if key == 'left' then
-	 if simplePlayer.flipped then
-	    simplePlayer.dir = 1
+   if gs:isGame() then
+      ge:keypressed(key, scancode, isrepeat)
+   elseif gs:isEnd() then
+      if key == 'return' then
+	 success, errormsg = love.filesystem.append("leaderboard.txt", string.format("%s - %.3f", leaderboard_text, leaderboard_time))
+	 if not success then
+	    print(errormsg)
+	    leaderboard_text = errormsg
 	 else
-	    simplePlayer.dir = -1
+	    leaderboard_text = ""
+	    leaderboard_time = 0    
+	    gs:setMenu()
 	 end
-      elseif key == 'right' then
-	 if simplePlayer.flipped then
-	    simplePlayer.dir = -1
-	 else
-	    simplePlayer.dir = 1
-	 end
+      elseif key == 'escape' then
+	 leaderboard_text = ""
+	 leaderboard_time = 0
+	 gs:setMenu()
       end
-   elseif key == 'space' then
-      --simplePlayer.rotation = simplePlayer.rotation + math.pi
-      --simplePlayer.dir = simplePlayer.dir * -1
-      -- simplePlayer.flipped = not simplePlayer.flipped
-      if simplePlayer.grounded then
-	 gravity = gravity * -1
+   else
+      if key == 'return' then
+	 gs:setGame()
+	 ge:init(gs)
+	 ge:start('level_1.lua')
+      elseif key == 'escape' then
+	 love.event.quit()
       end
-   elseif key == 'escape' then
-      love.event.quit()
    end
 end
 
 function love.keyreleased(key, isrepeat)
-   if key == 'left' or key == 'right' then
-      simplePlayer.curr_anim = simplePlayer.sprite.animations_names[1]
-      simplePlayer.curr_frame = 1
+   if gs:isGame() then
+      ge:keyreleased(key, isrepeat)
+   elseif gs:isEnd() then
+      --
+   else
+   end
+end
+
+function love.textinput(t)
+   if gs:isGame() then
+      --
+   elseif gs:isEnd() then
+      leaderboard_text = leaderboard_text .. t
+   else
+      --
    end
 end
