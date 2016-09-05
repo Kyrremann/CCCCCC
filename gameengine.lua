@@ -50,9 +50,9 @@ end
 function isAtGoal(cols)
    if #cols > 0 and cols[1].other.title == 'goal' then
       -- TODO: Move this to another file
-      leaderboard_time = 0
-      leaderboard_text = ""
-      leaderboard_time = love.timer.getTime() - start_time
+      leaderboard.time = 0
+      leaderboard.text = ""
+      leaderboard.time = love.timer.getTime() - start_time
       gs:setEnd()
       -- clean up?
    end
@@ -88,7 +88,7 @@ function gameengine:keypressed(key, scancode, isrepeat)
 	 gravity = gravity * -1
       end
    elseif key == 'escape' then
-      love.event.quit()
+      gs.setMenu()
    end
 end
 

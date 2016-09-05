@@ -2,9 +2,15 @@ function love.load()
    ge = require 'gameengine'
    gs = require 'gamestate'
    
+   fontSmall = love.graphics.newFont('fonts/kenpixel_future_square.ttf', 22)
+   love.graphics.setFont(fontSmall)
+
+   math.randomseed(os.time())
    gs:setMenu()
-   leaderboard_time = 0
-   leaderboard_text = ""
+   leaderboard = {
+      time = 0,
+      text = '',
+   }
 end
 
 function love.update(dt)
@@ -21,16 +27,60 @@ function love.update(dt)
    end
 end
 
+function new_color(old, mod)
+   old = old + mod
+   if old > 255 then
+      return 1
+   else
+      return old
+   end
+end
+
 function love.draw()
    if gs:isGame() then
+      love.graphics.setColor(255, 255, 255, 255)
       ge:draw()
    elseif gs:isEnd() then
+      love.graphics.setColor(255, 255, 255, 255)
       love.graphics.printf(
 	 string.format("You time was %.3f! Type you name, please! -- %q",
-	    leaderboard_time, leaderboard_text),
+	    leaderboard.time, leaderboard.text),
 	 0, 0, love.graphics.getWidth())
    else
-      --
+      love.graphics.setColor(84, 3, 142)
+      draw_c(0, 0)
+      draw_c(150, 0)
+      draw_c(300, 0)
+      draw_c(450, 0)
+      draw_c(600, 0)
+      draw_c(750, 0)
+      show_leaderboard()
+   end
+end
+
+function draw_c(mod_x, mod_y)
+      love.graphics.polygon('fill', {
+			       100 + mod_x, 100 + mod_y,
+			       150 + mod_x,  50 + mod_y,
+			       200 + mod_x,  50 + mod_y,
+			       200 + mod_x, 100 + mod_y,
+			       150 + mod_x, 100 + mod_y,
+			       150 + mod_x, 150 + mod_y,
+			       100 + mod_x, 150 + mod_y
+      })
+      love.graphics.polygon('fill', {
+			       100 + mod_x, 150 + mod_y,
+			       200 + mod_x, 150 + mod_y,
+			       200 + mod_x, 200 + mod_y,
+			       150 + mod_x, 200 + mod_y
+      })
+end
+
+function show_leaderboard()
+   local y = 300
+   for line in love.filesystem.lines("leaderboard.txt") do
+      love.graphics.print(line, 100, y, 0, 2, 2)
+      y = y + 40
    end
 end
 
@@ -39,18 +89,21 @@ function love.keypressed(key, scancode, isrepeat)
       ge:keypressed(key, scancode, isrepeat)
    elseif gs:isEnd() then
       if key == 'return' then
-	 success, errormsg = love.filesystem.append("leaderboard.txt", string.format("%s - %.3f", leaderboard_text, leaderboard_time))
+	 success, errormsg = love.filesystem.append("leaderboard.txt",
+						    string.format("%s - %.3f",
+								  leaderboard.text,
+								  leaderboard.time))
 	 if not success then
 	    print(errormsg)
-	    leaderboard_text = errormsg
+	    leaderboard.text = errormsg
 	 else
-	    leaderboard_text = ""
-	    leaderboard_time = 0    
+	    leaderboard.text = ""
+	    leaderboard.time = 0    
 	    gs:setMenu()
 	 end
       elseif key == 'escape' then
-	 leaderboard_text = ""
-	 leaderboard_time = 0
+	 leaderboard.text = ""
+	 leaderboard.time = 0
 	 gs:setMenu()
       end
    else
@@ -77,7 +130,7 @@ function love.textinput(t)
    if gs:isGame() then
       --
    elseif gs:isEnd() then
-      leaderboard_text = leaderboard_text .. t
+      leaderboard.text = leaderboard.text .. t
    else
       --
    end
