@@ -9,6 +9,14 @@ A [VVVVVV](http://thelettervsixtim.es/) clone for Javazone 2016.
 3. Run `love .` inside the repo
 4. Success?
 
+## Leaderboard
+The leaderboard is saved in a file called `leaderboard.txt` in the allowed folder. See [wiki:love.filesystem](https://love2d.org/wiki/love.filesystem) for more.
+- Windows XP: `C:\Documents and Settings\user\Application Data\LOVE\` or `%appdata%\LOVE\`
+- Windows Vista and 7: `C:\Users\user\AppData\Roaming\LOVE` or `%appdata%\LOVE\`
+- Linux: `$XDG_DATA_HOME/love/` or `~/.local/share/love/`
+- Mac: `/Users/user/Library/Application Support/LOVE/`
+
+
 ## TODO
 - [ ] main menu
  - lets the user start the game, see the leaderboard, and exit the game
