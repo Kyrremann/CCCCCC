@@ -51,7 +51,6 @@ function mapengine:loadLevel(level, world)
 	       quad_x, quad_y,
 	       16, 16, 492, 305)
 	 }
-	 print(tile.y, tile.x)
 	 mapBank[tile.y][tile.x] = temp
 	 world:add(temp, (tile.x - 1) * 16, (tile.y - 1) * 16, 16, 16)
       end
