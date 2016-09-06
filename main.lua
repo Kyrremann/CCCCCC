@@ -7,6 +7,8 @@ function love.load()
    gs = require 'gamestate'
    fw = require 'firework.FireworkEngine'()
    love.graphics.setBlendMode('add')
+   highscore = require 'sick'
+   highscore.set('highscore.txt', 1000)
    
    fontSmall = love.graphics.newFont('fonts/kenpixel_future_square.ttf', 22)
    love.graphics.setFont(fontSmall)
@@ -94,10 +96,21 @@ function draw_c(mod_x, mod_y)
 end
 
 function show_leaderboard()
-   local y = 300
-   for line in love.filesystem.lines("leaderboard.txt") do
-      love.graphics.print(line, 100, y, 0, 2, 2)
-      y = y + 40
+   love.graphics.setColor(255, 255, 255, 255)
+   local y = 200
+   local x = 100
+   for i, score, name in highscore() do
+      if name then
+	 y = y + 40
+	 love.graphics.print(
+	    string.format("%02d:\t%s\t%.3f", i, name, score),
+	    x, y)
+      end
+      if i == 20 then
+	 x = 1050
+	 y = 0
+      end
+      if i == 45 then return end
    end
 end
 
@@ -106,18 +119,10 @@ function love.keypressed(key, scancode, isrepeat)
       ge:keypressed(key, scancode, isrepeat)
    elseif gs:isEnd() then
       if key == 'return' then
-	 success, errormsg = love.filesystem.append("leaderboard.txt",
-						    string.format("%s - %.3f\n",
-								  leaderboard.text,
-								  leaderboard.time))
-	 if not success then
-	    print(errormsg)
-	    leaderboard.text = errormsg
-	 else
-	    leaderboard.text = ""
-	    leaderboard.time = 0    
-	    gs:setMenu()
-	 end
+	 highscore.add(leaderboard.text, leaderboard.time)
+	 leaderboard.text = ""
+	 leaderboard.time = 0
+	 gs:setMenu()
       elseif key == 'escape' then
 	 leaderboard.text = ""
 	 leaderboard.time = 0
@@ -129,6 +134,7 @@ function love.keypressed(key, scancode, isrepeat)
 	 ge:init(gs)
 	 ge:start('level_ciber2.lua')
       elseif key == 'escape' then
+	 highscore.save()
 	 love.event.quit()
       end
    end
