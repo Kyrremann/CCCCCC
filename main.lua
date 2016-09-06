@@ -5,6 +5,8 @@ function love.load()
 
    ge = require 'gameengine'
    gs = require 'gamestate'
+   fw = require 'firework.FireworkEngine'()
+   love.graphics.setBlendMode('add')
    
    fontSmall = love.graphics.newFont('fonts/kenpixel_future_square.ttf', 22)
    love.graphics.setFont(fontSmall)
@@ -15,6 +17,7 @@ function love.load()
       time = 0,
       text = '',
    }
+   fwt = 0 -- firework timer
 end
 
 function love.update(dt)
@@ -24,6 +27,15 @@ function love.update(dt)
       -- ask user to type name
       -- show time
    else
+      fwt = fwt + dt
+      fw:update(dt)
+      if fwt > 0.2 then
+	 fwt = fwt - 0.2
+	 fw:addFirework(
+	    16 + math.random(love.graphics.getWidth() - 16 * 2),
+	    16 + math.random(love.graphics.getHeight() - 16 * 2)
+	 )
+      end
       -- menu
       -- show name of game
       -- show leaderboard
@@ -59,6 +71,7 @@ function love.draw()
       draw_c(600, 0)
       draw_c(750, 0)
       show_leaderboard()
+      fw:draw()
    end
 end
 
