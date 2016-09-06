@@ -1,4 +1,8 @@
 function love.load()
+   if not love.filesystem.exists('leaderboard.txt') then
+      love.filesystem.write('leaderboard.txt', '')
+   end
+
    ge = require 'gameengine'
    gs = require 'gamestate'
    
@@ -90,7 +94,7 @@ function love.keypressed(key, scancode, isrepeat)
    elseif gs:isEnd() then
       if key == 'return' then
 	 success, errormsg = love.filesystem.append("leaderboard.txt",
-						    string.format("%s - %.3f",
+						    string.format("%s - %.3f\n",
 								  leaderboard.text,
 								  leaderboard.time))
 	 if not success then

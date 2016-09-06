@@ -35,8 +35,7 @@ function mapengine:loadLevel(level, world)
 	    mapBank[tile.y][x] = temp
 	    world:add(temp, (x - 1) * 16, (tile.y - 1) * 16, 16, 16)
 	 end
-      end
-      if tile.y_range then
+      elseif tile.y_range then
 	 for y=tile.y_range[1], tile.y_range[2] do
 	    local temp = {
 	       quad = love.graphics.newQuad(
@@ -46,6 +45,15 @@ function mapengine:loadLevel(level, world)
 	    mapBank[y][tile.x] = temp
 	    world:add(temp, (tile.x - 1) * 16, (y - 1) * 16, 16, 16)
 	 end
+      elseif tile.x and tile.y then
+	 local temp = {
+	    quad = love.graphics.newQuad(
+	       quad_x, quad_y,
+	       16, 16, 492, 305)
+	 }
+	 print(tile.y, tile.x)
+	 mapBank[tile.y][tile.x] = temp
+	 world:add(temp, (tile.x - 1) * 16, (tile.y - 1) * 16, 16, 16)
       end
    end
 
