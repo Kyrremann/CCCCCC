@@ -114,7 +114,7 @@ function love.keypressed(key, scancode, isrepeat)
       if key == 'return' then
 	 gs:setGame()
 	 ge:init(gs)
-	 ge:start('level_ciber.lua')
+	 ge:start('level_ciber2.lua')
       elseif key == 'escape' then
 	 love.event.quit()
       end
