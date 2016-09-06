@@ -11,8 +11,14 @@ return {
    goal = {
       x = 82,
       y = 47,
-      tile_x = 375,
-      tile_y = 68
+      quad = {
+	 x = 375,
+	 y = 68
+      }
+   },
+   default_quad = {
+      x = 289,
+      y = 221
    },
    tiles = {
       --[[{
@@ -25,51 +31,35 @@ return {
 	 }]]
       {
 	 x_range = { 1, 85 },
-	 y = 1,
-	 tile_x = 289,
-	 tile_y = 221
+	 y = 1
       },
       {
 	 x_range = { 1, 85 },
-	 y = 48,
-	 tile_x = 289,
-	 tile_y = 221
+	 y = 48
       },
       {
 	 x_range = { 2, 65 },
-	 y = 10,
-	 tile_x = 289,
-	 tile_y = 221
+	 y = 10
       },
       {
 	 x_range = { 22, 85 },
-	 y = 20,
-	 tile_x = 289,
-	 tile_y = 221
+	 y = 20
       },
       {
 	 x_range = { 2, 65 },
-	 y = 30,
-	 tile_x = 289,
-	 tile_y = 221
+	 y = 30
       },
       {
 	 x_range = { 22, 85 },
-	 y = 40,
-	 tile_x = 289,
-	 tile_y = 221
+	 y = 40
       },
       {
 	 y_range = { 2, 48},
-	 x = 1,
-	 tile_x = 289,
-	 tile_y = 221
+	 x = 1
       },
       {
 	 y_range = { 2, 48},
-	 x = 85,
-	 tile_x = 289,
-	 tile_y = 221
+	 x = 85
       }
    }
 }

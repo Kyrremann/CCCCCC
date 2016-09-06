@@ -16,12 +16,20 @@ function mapengine:loadLevel(level, world)
    end
 
    for index, tile in ipairs(protoMap.tiles) do
+      local quad_x, quad_y
+      if tile.quad ~= nil then
+	 quad_x = tile.quad.x
+	 quad_y = tile.quad.y
+      else
+	 quad_x = protoMap.default_quad.x
+	 quad_y = protoMap.default_quad.y
+      end
       if tile.x_range then
 	 for x=tile.x_range[1], tile.x_range[2] do
 	    local temp = {
 	       title = 'simple ground',
 	       quad = love.graphics.newQuad(
-		  tile.tile_x, tile.tile_y,
+		  quad_x, quad_y,
 		  16, 16, 492, 305)
 	    }
 	    mapBank[tile.y][x] = temp
@@ -32,7 +40,7 @@ function mapengine:loadLevel(level, world)
 	 for y=tile.y_range[1], tile.y_range[2] do
 	    local temp = {
 	       quad = love.graphics.newQuad(
-		  tile.tile_x, tile.tile_y,
+		  quad_x, quad_y,
 		  16, 16, 492, 305)
 	    }
 	    mapBank[y][tile.x] = temp
@@ -45,7 +53,7 @@ function mapengine:loadLevel(level, world)
    local temp = {
       title = 'goal',
       quad = love.graphics.newQuad(
-	 goal.tile_x, goal.tile_y,
+	 goal.quad.x, goal.quad.y,
 	 16, 16, 492, 305)
    }
    mapBank[goal.y][goal.x] = temp
