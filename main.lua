@@ -1,47 +1,30 @@
 function love.load()
-   if not love.filesystem.exists('leaderboard.txt') then
-      love.filesystem.write('leaderboard.txt', '')
-   end
-
    ge = require 'gameengine'
    gs = require 'gamestate'
-   fw = require 'firework.FireworkEngine'()
-   love.graphics.setBlendMode('add')
+   me = require 'menuengine'
+   
    highscore = require 'sick'
    highscore.set('highscore.txt', 1000)
-   
+
    fontSmall = love.graphics.newFont('fonts/kenpixel_future_square.ttf', 22)
    love.graphics.setFont(fontSmall)
 
    math.randomseed(os.time())
    gs:setMenu()
+   me.init()
    leaderboard = {
       time = 0,
       text = '',
    }
-   fwt = 0 -- firework timer
 end
 
 function love.update(dt)
    if gs:isGame() then
       ge:update(dt)
    elseif gs:isEnd() then
-      -- ask user to type name
-      -- show time
+      --
    else
-      fwt = fwt + dt
-      fw:update(dt)
-      if fwt > 0.2 then
-	 fwt = fwt - 0.2
-	 fw:addFirework(
-	    16 + math.random(love.graphics.getWidth() - 16 * 2),
-	    16 + math.random(love.graphics.getHeight() - 16 * 2)
-	 )
-      end
-      -- menu
-      -- show name of game
-      -- show leaderboard
-      -- show start
+      me:update(dt)
    end
 end
 
@@ -65,52 +48,7 @@ function love.draw()
 	    leaderboard.time, leaderboard.text),
 	 0, 0, love.graphics.getWidth())
    else
-      love.graphics.setColor(84, 3, 142)
-      draw_c(0, 0)
-      draw_c(150, 0)
-      draw_c(300, 0)
-      draw_c(450, 0)
-      draw_c(600, 0)
-      draw_c(750, 0)
-      show_leaderboard()
-      fw:draw()
-   end
-end
-
-function draw_c(mod_x, mod_y)
-      love.graphics.polygon('fill', {
-			       100 + mod_x, 100 + mod_y,
-			       150 + mod_x,  50 + mod_y,
-			       200 + mod_x,  50 + mod_y,
-			       200 + mod_x, 100 + mod_y,
-			       150 + mod_x, 100 + mod_y,
-			       150 + mod_x, 150 + mod_y,
-			       100 + mod_x, 150 + mod_y
-      })
-      love.graphics.polygon('fill', {
-			       100 + mod_x, 150 + mod_y,
-			       200 + mod_x, 150 + mod_y,
-			       200 + mod_x, 200 + mod_y,
-			       150 + mod_x, 200 + mod_y
-      })
-end
-
-function show_leaderboard()
-   love.graphics.setColor(255, 255, 255, 255)
-   local y = 200
-   local x = 100
-   for i, score, name in highscore() do
-      if name then
-	 y = y + 40
-	 love.graphics.print(
-	    string.format("%02d:\t%s\t%.3f", i, name, score),
-	    x, y)
-      end
-      if i == 20 then
-	 x = 1050
-	 y = 0
-      end
-      if i == 45 then return end
+      me:draw()
    end
 end
 
@@ -127,6 +65,8 @@ function love.keypressed(key, scancode, isrepeat)
 	 leaderboard.text = ""
 	 leaderboard.time = 0
 	 gs:setMenu()
+      elseif key == 'backspace' then
+	 leaderboard.text = leaderboard.text:sub(1, -2)
       end
    else
       if key == 'return' then

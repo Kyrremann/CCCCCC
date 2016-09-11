@@ -9,6 +9,8 @@ A [VVVVVV](http://thelettervsixtim.es/) clone for Javazone 2016.
 3. Run `love .` inside the repo
 4. Success?
 
+![CCCCCC in the wild](CCCCCC.jpg)
+
 ## Leaderboard
 The leaderboard is saved in a file called `highscore.txt` in the allowed folder. See [wiki:love.filesystem](https://love2d.org/wiki/love.filesystem) for more. Using the library [SICK](https://love2d.org/wiki/SICK)
 - Windows XP: `C:\Documents and Settings\user\Application Data\LOVE\` or `%appdata%\LOVE\`
